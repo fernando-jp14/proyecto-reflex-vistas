@@ -8,7 +8,7 @@ class Ticket(models.Model):
     Basado en la estructura del módulo Laravel 05_appointments_status.
     """
     
-    # TODO: (Dependencia externa) - appointment = models.ForeignKey('Appointment', on_delete=models.CASCADE, verbose_name="Cita")
+    appointment = models.ForeignKey('Appointment', on_delete=models.CASCADE, verbose_name="Cita")
     
     # Información del ticket
     ticket_number = models.CharField(

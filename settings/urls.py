@@ -19,6 +19,22 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Módulo de Gestión de Citas y Estados
+    
+    # 🏗️ Módulo 1: Arquitectura y Usuarios Base
+    path('architect/', include('architect.urls')),
+    
+    # 👤 Módulo 2: Perfiles de Usuarios
+    path('profiles/', include('users_profiles.urls')),
+    
+    # 🩺 Módulo 3: Pacientes y Diagnósticos
+    path('patients/', include('patients_diagnoses.urls')),
+    
+    # 👨‍⚕️ Módulo 4: Terapeutas (incluye ubicaciones)
+    path('therapists/', include('therapists.urls')),
+    
+    # 📅 Módulo 5: Citas y Estados
     path('appointments/', include('appointments_status.urls')),
+    
+    # ⚙️ Módulo 6: Historiales y Configuraciones
+    path('configurations/', include('histories_configurations.urls')),
 ]

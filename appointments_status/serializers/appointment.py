@@ -12,9 +12,22 @@ class AppointmentSerializer(serializers.ModelSerializer):
     is_completed = serializers.ReadOnlyField()
     is_pending = serializers.ReadOnlyField()
     
-    # Campos de relación (solo lectura por ahora)
+    # Campos de relación
     appointment_status_name = serializers.CharField(
         source='appointment_status.name', 
+        read_only=True,
+        allow_null=True
+    )
+    patient_name = serializers.CharField(
+        source='patient.get_full_name', 
+        read_only=True
+    )
+    therapist_name = serializers.CharField(
+        source='therapist.get_full_name', 
+        read_only=True
+    )
+    payment_type_name = serializers.CharField(
+        source='payment_type.name', 
         read_only=True,
         allow_null=True
     )
@@ -23,6 +36,10 @@ class AppointmentSerializer(serializers.ModelSerializer):
         model = Appointment
         fields = [
             'id',
+            'patient',
+            'patient_name',
+            'therapist',
+            'therapist_name',
             'appointment_date',
             'appointment_hour',
             'ailments',
@@ -38,6 +55,8 @@ class AppointmentSerializer(serializers.ModelSerializer):
             'social_benefit',
             'payment_detail',
             'payment',
+            'payment_type',
+            'payment_type_name',
             'ticket_number',
             'appointment_status',
             'appointment_status_name',
@@ -49,8 +68,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
         
-        # TODO: (Dependencia externa) - Agregar campos cuando estén disponibles:
-        # 'patient', 'patient_name', 'therapist', 'therapist_name', 'payment_type', 'payment_type_name'
+        # Campos de relación integrados
     
     def validate_appointment_date(self, value):
         """Validación personalizada para la fecha de la cita"""

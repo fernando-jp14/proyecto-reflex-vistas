@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-fd#(-5p4&w59s#!ws(&w&as)y3ea&q#zmlm4k8(!v&bsv@!3!h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']  # Para desarrollo
 
 
 # Application definition
@@ -39,8 +39,23 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
+    'guardian',
     'appointments_status',
+    'architect',
+    'histories_configurations',
+    'patients_diagnoses',
+    'therapists',
+    'users_profiles',
 ]
+
+# Modelo de usuario personalizado
+AUTH_USER_MODEL = 'architect.User'
+
+# Configuración de Guardian
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

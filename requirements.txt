@@ -1,0 +1,138 @@
+# ========================================
+# LIBRERÍAS DEL PROYECTO REFLEXO MTV
+# Sistema de Gestión de Citas y Terapias
+# ========================================
+
+# ========================================
+# DJANGO Y FRAMEWORK PRINCIPAL
+# ========================================
+Django==5.2.5
+djangorestframework==3.16.1
+
+# ========================================
+# AUTENTICACIÓN Y PERMISOS
+# ========================================
+django-guardian==2.4.0
+
+# ========================================
+# FILTROS Y BÚSQUEDA
+# ========================================
+django-filter==24.1
+
+# ========================================
+# UTILIDADES DE DESARROLLO
+# ========================================
+# Para manejo de variables de entorno
+python-dotenv==1.0.0
+
+# Para validación de datos
+jsonschema==4.21.1
+
+# Para manejo de fechas y zonas horarias
+pytz==2024.1
+
+# ========================================
+# BASE DE DATOS
+# ========================================
+# SQLite (incluido con Python)
+# Para PostgreSQL (opcional)
+# psycopg2-binary==2.9.9
+
+# ========================================
+# SERIALIZACIÓN Y API
+# ========================================
+# DRF ya incluye serialización JSON
+# Para XML (opcional)
+# defusedxml==0.7.1
+
+# ========================================
+# SEGURIDAD
+# ========================================
+# Django ya incluye CSRF protection
+# Para CORS (si se necesita frontend)
+# django-cors-headers==4.3.1
+
+# ========================================
+# TESTING
+# ========================================
+# Django ya incluye testing framework
+# Para testing avanzado (opcional)
+# pytest==7.4.3
+# pytest-django==4.7.0
+
+# ========================================
+# DESARROLLO Y DEBUGGING
+# ========================================
+# Para debugging (opcional)
+# django-debug-toolbar==4.2.0
+
+# ========================================
+# PRODUCCIÓN
+# ========================================
+# Para servir archivos estáticos
+# whitenoise==6.6.0
+
+# Para Gunicorn (servidor WSGI)
+# gunicorn==21.2.0
+
+# ========================================
+# DOCUMENTACIÓN
+# ========================================
+# Para generar documentación automática
+# drf-spectacular==0.27.0
+
+# ========================================
+# MONITOREO Y LOGGING
+# ========================================
+# Para logging avanzado (opcional)
+# structlog==23.2.0
+
+# ========================================
+# VALIDACIÓN Y SANITIZACIÓN
+# ========================================
+# Para validación de emails
+# email-validator==2.1.0
+
+# ========================================
+# UTILIDADES ADICIONALES
+# ========================================
+# Para manejo de archivos
+# Pillow==10.1.0
+
+# Para compresión
+# django-compressor==4.4
+
+# ========================================
+# NOTAS IMPORTANTES
+# ========================================
+# 
+# LIBRERÍAS INSTALADAS ACTUALMENTE:
+# - Django 5.2.5 (Framework principal)
+# - Django REST Framework 3.16.1 (APIs)
+# - django-guardian 2.4.0 (Permisos por objeto)
+# - django-filter 24.1 (Filtros avanzados)
+#
+# LIBRERÍAS OPCIONALES (comentadas):
+# - Para base de datos PostgreSQL
+# - Para CORS (si se necesita frontend)
+# - Para testing avanzado
+# - Para documentación automática
+# - Para producción y despliegue
+#
+# ========================================
+# COMANDOS DE INSTALACIÓN
+# ========================================
+#
+# Instalar todas las librerías:
+# pip install -r requirements.txt
+#
+# Instalar solo las esenciales:
+# pip install Django==5.2.5 djangorestframework==3.16.1 django-guardian==2.4.0 django-filter==24.1
+#
+# ========================================
+# VERSIÓN DEL PROYECTO
+# ========================================
+# Proyecto: Reflexo MTV - Sistema de Gestión
+# Versión: 2.0 - Integración Completa
+# Fecha: 21 de Agosto, 2025
+# Estado: ✅ Activo, Funcional e Integrado

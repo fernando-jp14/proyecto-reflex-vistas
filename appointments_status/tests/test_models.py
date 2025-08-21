@@ -1,7 +1,11 @@
 from django.test import TestCase
 from django.utils import timezone
 from decimal import Decimal
+from datetime import date
 from ..models import Appointment, AppointmentStatus, Ticket
+from patients_diagnoses.models import Patient
+from therapists.models import Therapist, Region, Province, District
+from histories_configurations.models import DocumentType, PaymentType
 
 
 class AppointmentStatusModelTest(TestCase):
@@ -52,11 +56,55 @@ class AppointmentModelTest(TestCase):
     
     def setUp(self):
         """Configuración inicial para las pruebas"""
+        # Crear datos de prueba necesarios
         self.status = AppointmentStatus.objects.create(
             name='Confirmada',
             description='Cita confirmada'
         )
+        
+        # Crear ubicaciones
+        self.region = Region.objects.create(name="Lima", ubigeo_code="15")
+        self.province = Province.objects.create(name="Lima", ubigeo_code="1501", region=self.region)
+        self.district = District.objects.create(name="Lima", ubigeo_code="150101", province=self.province)
+        
+        # Crear tipo de documento
+        self.document_type = DocumentType.objects.create(name="DNI", description="Documento Nacional de Identidad")
+        
+        # Crear paciente
+        self.patient = Patient.objects.create(
+            document_number="12345678",
+            name="Juan",
+            paternal_lastname="Pérez",
+            maternal_lastname="García",
+            birth_date=date(1990, 1, 1),
+            sex="M",
+            primary_phone="999888777",
+            address="Av. Test 123",
+            region=self.region,
+            province=self.province,
+            district=self.district,
+            document_type=self.document_type
+        )
+        
+        # Crear terapeuta
+        self.therapist = Therapist.objects.create(
+            document_type="DNI",
+            document_number="87654321",
+            first_name="María",
+            last_name_paternal="López",
+            last_name_maternal="González",
+            birth_date=date(1985, 5, 15),
+            gender="F",
+            phone="987654321",
+            region_fk=self.region,
+            province_fk=self.province,
+            district_fk=self.district,
+            is_active=True
+        )
+        
         self.appointment_data = {
+            'patient': self.patient,
+            'therapist': self.therapist,
             'appointment_date': timezone.now().date() + timezone.timedelta(days=1),
             'appointment_hour': timezone.now().time(),
             'appointment_type': 'Consulta',
@@ -102,7 +150,65 @@ class TicketModelTest(TestCase):
     
     def setUp(self):
         """Configuración inicial para las pruebas"""
+        # Crear datos de prueba necesarios (reutilizar del AppointmentModelTest)
+        self.status = AppointmentStatus.objects.create(
+            name='Confirmada',
+            description='Cita confirmada'
+        )
+        
+        # Crear ubicaciones
+        self.region = Region.objects.create(name="Lima", ubigeo_code="15")
+        self.province = Province.objects.create(name="Lima", ubigeo_code="1501", region=self.region)
+        self.district = District.objects.create(name="Lima", ubigeo_code="150101", province=self.province)
+        
+        # Crear tipo de documento
+        self.document_type = DocumentType.objects.create(name="DNI", description="Documento Nacional de Identidad")
+        
+        # Crear paciente
+        self.patient = Patient.objects.create(
+            document_number="12345678",
+            name="Juan",
+            paternal_lastname="Pérez",
+            maternal_lastname="García",
+            birth_date=date(1990, 1, 1),
+            sex="M",
+            primary_phone="999888777",
+            address="Av. Test 123",
+            region=self.region,
+            province=self.province,
+            district=self.district,
+            document_type=self.document_type
+        )
+        
+        # Crear terapeuta
+        self.therapist = Therapist.objects.create(
+            document_type="DNI",
+            document_number="87654321",
+            first_name="María",
+            last_name_paternal="López",
+            last_name_maternal="González",
+            birth_date=date(1985, 5, 15),
+            gender="F",
+            phone="987654321",
+            region_fk=self.region,
+            province_fk=self.province,
+            district_fk=self.district,
+            is_active=True
+        )
+        
+        # Crear cita
+        self.appointment = Appointment.objects.create(
+            patient=self.patient,
+            therapist=self.therapist,
+            appointment_date=timezone.now().date() + timezone.timedelta(days=1),
+            appointment_hour=timezone.now().time(),
+            appointment_type='Consulta',
+            room='Sala 1',
+            appointment_status=self.status
+        )
+        
         self.ticket_data = {
+            'appointment': self.appointment,
             'ticket_number': 'TICKET-001',
             'amount': Decimal('100.00'),
             'payment_method': 'efectivo',

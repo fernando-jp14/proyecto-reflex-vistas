@@ -8,8 +8,9 @@ class Appointment(models.Model):
     Basado en la estructura del módulo Laravel 05_appointments_status.
     """
     
-    # TODO: (Dependencia externa) - patient = models.ForeignKey('patients.Patient', on_delete=models.CASCADE)
-    # TODO: (Dependencia externa) - therapist = models.ForeignKey('therapists.Therapist', on_delete=models.CASCADE)
+    # Relaciones con otros módulos
+    patient = models.ForeignKey('patients_diagnoses.Patient', on_delete=models.CASCADE, verbose_name="Paciente")
+    therapist = models.ForeignKey('therapists.Therapist', on_delete=models.CASCADE, verbose_name="Terapeuta")
     
     # Campos principales de la cita
     appointment_date = models.DateField(verbose_name="Fecha de la cita")
@@ -46,7 +47,7 @@ class Appointment(models.Model):
         verbose_name="Estado de la cita"
     )
     
-    # TODO: (Dependencia externa) - payment_type = models.ForeignKey('payment_types.PaymentType', on_delete=models.SET_NULL, null=True, blank=True)
+    payment_type = models.ForeignKey('histories_configurations.PaymentType', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Tipo de pago")
     
     # Campos de auditoría
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")

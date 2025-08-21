@@ -12,10 +12,18 @@ class TicketSerializer(serializers.ModelSerializer):
     is_paid = serializers.ReadOnlyField()
     is_pending = serializers.ReadOnlyField()
     
+    # Campos de relación
+    appointment_details = serializers.CharField(
+        source='appointment.__str__', 
+        read_only=True
+    )
+    
     class Meta:
         model = Ticket
         fields = [
             'id',
+            'appointment',
+            'appointment_details',
             'ticket_number',
             'payment_date',
             'amount',
@@ -30,8 +38,7 @@ class TicketSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'payment_date', 'created_at', 'updated_at']
         
-        # TODO: (Dependencia externa) - Agregar campo cuando esté disponible:
-        # 'appointment', 'appointment_details'
+        # Campo de relación integrado
     
     def validate_ticket_number(self, value):
         """Validación personalizada para el número de ticket"""

@@ -1,0 +1,21 @@
+# ========================================
+# LIBRERÍAS ESENCIALES - REFLEXO MTV
+# Solo las librerías actualmente instaladas
+# ========================================
+
+# Framework principal
+Django==5.2.5
+
+# APIs REST
+djangorestframework==3.16.1
+
+# Permisos por objeto
+django-guardian==2.4.0
+
+# Filtros avanzados
+django-filter==24.1
+
+# ========================================
+# COMANDO DE INSTALACIÓN:
+# pip install -r requirements-essential.txt
+# ========================================
