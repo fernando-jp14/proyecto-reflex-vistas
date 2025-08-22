@@ -104,19 +104,17 @@ class UserSearchView(generics.ListAPIView):
 
 
 class UserProfileView(generics.RetrieveAPIView):
-    """Vista para obtener perfil público de un usuario"""
+    """Vista para obtener perfil completo del usuario autenticado"""
     
     serializer_class = UserSerializer
-    permission_classes = [permissions.AllowAny]
-    queryset = User.objects.filter(is_active=True)
+    permission_classes = [permissions.IsAuthenticated]
     
     def get_object(self):
-        """Retorna el usuario por username"""
-        username = self.kwargs.get('username')
-        return get_object_or_404(User, username=username, is_active=True)
+        """Retorna el usuario autenticado"""
+        return self.request.user
     
     def get_serializer_context(self):
         """Agrega contexto adicional al serializer"""
         context = super().get_serializer_context()
-        context['public_view'] = True
+        context['public_view'] = False  # Es vista privada del usuario autenticado
         return context

@@ -10,7 +10,7 @@ class DistrictSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = District
-        fields = ['id', 'name', 'code', 'province', 'province_name', 'region_name']
+        fields = ['id', 'name', 'ubigeo_code', 'province', 'province_name', 'region_name']
         read_only_fields = ['id', 'province_name', 'region_name']
     
     def validate_name(self, value):
@@ -19,7 +19,7 @@ class DistrictSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("El nombre del distrito no puede estar vacío")
         return value.strip()
     
-    def validate_code(self, value):
+    def validate_ubigeo_code(self, value):
         """Validar el código del distrito"""
         if not value or not value.strip():
             raise serializers.ValidationError("El código del distrito no puede estar vacío")

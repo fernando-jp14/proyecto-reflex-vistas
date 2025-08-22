@@ -41,8 +41,24 @@ def history_create(request):
     except DocumentType.DoesNotExist:
         return JsonResponse({"error": "document_type inválido"}, status=400)
     
-    h = History.objects.create(document_type=dt, document_number=document_number)
-    return JsonResponse({"id": h.id}, status=201)
+    # Verificar si ya existe un historial activo con esta combinación
+    existing_history = History.objects.filter(
+        document_type=dt,
+        document_number=document_number,
+        deleted_at__isnull=True
+    ).first()
+    
+    if existing_history:
+        return JsonResponse({
+            "error": "Ya existe un historial activo con este tipo de documento y número",
+            "existing_history_id": existing_history.id
+        }, status=409)
+    
+    try:
+        h = History.objects.create(document_type=dt, document_number=document_number)
+        return JsonResponse({"id": h.id}, status=201)
+    except Exception as e:
+        return JsonResponse({"error": "Error al crear el historial"}, status=500)
 
 @csrf_exempt
 def history_delete(request, pk):

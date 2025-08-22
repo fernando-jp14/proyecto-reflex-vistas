@@ -3,8 +3,11 @@ from rest_framework.routers import DefaultRouter
 from .views.diagnosis import ( DiagnosisListCreateAPIView, DiagnosisRetrieveUpdateDestroyAPIView, DiagnosisSearchAPIView )
 from .views.patient import ( PatientListCreateView, PatientRetrieveUpdateDeleteView, PatientSearchView )
 from .views.medical_record import ( MedicalRecordListCreateAPIView, MedicalRecordRetrieveUpdateDestroyAPIView, PatientMedicalHistoryAPIView, DiagnosisStatisticsAPIView )
-router = DefaultRouter()
-router.register(r'patients',PatientListCreateView, basename='patient')
+
+# Eliminamos el router ya que usamos vistas basadas en clases
+# router = DefaultRouter()
+# router.register(r'patients',PatientListCreateView, basename='patient')
+
 urlpatterns = [
      # URLs de diagnósticos
      path('diagnoses/', DiagnosisListCreateAPIView.as_view(), name='diagnosis-list-create'), 

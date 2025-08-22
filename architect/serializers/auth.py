@@ -39,19 +39,32 @@ class LoginSerializer(serializers.Serializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-    password2 = serializers.CharField(write_only=True, required=True)
+    password = serializers.CharField(write_only=True, required=True, min_length=8)
+    password_confirm = serializers.CharField(write_only=True, required=True)
+    username = serializers.CharField(required=True, max_length=150)
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'password2')
+        fields = ('username', 'email', 'password', 'password_confirm')
+
+    def validate_password(self, value):
+        # Validación personalizada de contraseña
+        if len(value) < 8:
+            raise serializers.ValidationError("La contraseña debe tener al menos 8 caracteres.")
+        
+        # Verificar que no sea una contraseña común
+        common_passwords = ['password', '123456', '12345678', 'qwerty', 'abc123', 'password123', 'admin', 'letmein']
+        if value.lower() in common_passwords:
+            raise serializers.ValidationError("Esta contraseña es demasiado común. Elige una contraseña más segura.")
+        
+        return value
 
     def validate(self, attrs):
-        if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Las contraseñas no coinciden"})
+        if attrs['password'] != attrs['password_confirm']:
+            raise serializers.ValidationError({"password_confirm": "Las contraseñas no coinciden"})
         return attrs
 
     def create(self, validated_data):
-        validated_data.pop('password2')
+        validated_data.pop('password_confirm')
         user = User.objects.create_user(**validated_data)
         return user 

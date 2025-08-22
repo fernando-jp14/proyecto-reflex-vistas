@@ -8,18 +8,21 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     """Serializer para lectura del modelo User"""
     
-    profile_photo_url = serializers.SerializerMethodField()
     full_name = serializers.SerializerMethodField()
+    profile_photo_url = serializers.SerializerMethodField()
     
     class Meta:
         model = User
         fields = [
             'id', 'username', 'email', 'first_name', 'last_name',
-            'profile_photo_url', 'full_name', 'phone_number',
-            'date_of_birth', 'country', 'city', 'website', 'bio',
-            'email_verified', 'date_joined', 'last_login'
+            'full_name', 'phone', 'rol', 'is_active', 'date_joined', 'last_login',
+            'profile_photo_url'
         ]
-        read_only_fields = ['id', 'username', 'date_joined', 'last_login', 'email_verified']
+        read_only_fields = ['id', 'username', 'date_joined', 'last_login', 'rol']
+    
+    def get_full_name(self, obj):
+        """Retorna el nombre completo del usuario"""
+        return obj.get_full_name()
     
     def get_profile_photo_url(self, obj):
         """Retorna la URL de la foto de perfil"""
@@ -29,10 +32,6 @@ class UserSerializer(serializers.ModelSerializer):
                 return request.build_absolute_uri(obj.profile_photo.url)
             return obj.profile_photo.url
         return None
-    
-    def get_full_name(self, obj):
-        """Retorna el nombre completo del usuario"""
-        return obj.get_full_name()
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
@@ -41,21 +40,15 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'first_name', 'last_name', 'phone_number',
-            'date_of_birth', 'country', 'city', 'website', 'bio'
+            'first_name', 'last_name', 'phone'
         ]
     
-    def validate_phone_number(self, value):
+    def validate_phone(self, value):
         """Validación personalizada para el número de teléfono"""
         if value:
-            # La validación del regex ya está en el modelo
-            return value
-        return value
-    
-    def validate_website(self, value):
-        """Validación para el sitio web"""
-        if value and not value.startswith(('http://', 'https://')):
-            value = 'https://' + value
+            # Validación básica de formato de teléfono
+            if len(value) < 7:
+                raise serializers.ValidationError("El número de teléfono debe tener al menos 7 dígitos")
         return value
     
     def update(self, instance, validated_data):

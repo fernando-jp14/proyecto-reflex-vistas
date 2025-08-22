@@ -12,5 +12,5 @@ app_name = 'appointments_status'
 
 urlpatterns = [
     # URLs del router para los ViewSets
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
 ]

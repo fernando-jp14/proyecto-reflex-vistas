@@ -35,9 +35,9 @@ class PatientSerializer(serializers.ModelSerializer):
     maternal_lastname = serializers.CharField(required=True, max_length=100)
     name = serializers.CharField(required=True, max_length=100)
     birth_date = serializers.DateField(required=True)
-    sex = serializers.ChoiceField(choices=[('Masculino', 'Masculino'), ('Femenino', 'Femenino')], required=True)
+    sex = serializers.ChoiceField(choices=[('M', 'Masculino'), ('F', 'Femenino'), ('O', 'Otro')], required=True)
     primary_phone = serializers.CharField(max_length=20, required=True)
-    email = serializers.EmailField(required=True)
+    email = serializers.EmailField(required=False, allow_blank=True, allow_null=True)
     address = serializers.CharField(max_length=255, required=True)
     
     class Meta:
