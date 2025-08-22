@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'patients_diagnoses',
     'therapists',
     'users_profiles',
+    'company_reports',
 ]
 
 # Modelo de usuario personalizado

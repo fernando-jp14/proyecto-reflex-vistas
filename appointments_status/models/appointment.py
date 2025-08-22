@@ -70,9 +70,13 @@ class Appointment(models.Model):
     @property
     def is_completed(self):
         """Verifica si la cita está completada basándose en la fecha"""
+        if self.appointment_date is None:
+            return False  # Si no hay fecha, consideramos que la cita no está completada
         return self.appointment_date < timezone.now().date()
-    
+
     @property
     def is_pending(self):
         """Verifica si la cita está pendiente"""
+        if self.appointment_date is None:
+            return False  # Si no hay fecha, consideramos que la cita no está pendiente
         return self.appointment_date >= timezone.now().date()

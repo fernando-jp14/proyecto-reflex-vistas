@@ -42,5 +42,8 @@ urlpatterns = [
         
         # ⚙️ Módulo 6: Historiales y Configuraciones
         path('configurations/', include('histories_configurations.urls')),
+
+        # 📊 Módulo 8: Reportes de Empresas
+        path('company/', include('company_reports.urls')),
     ])),
 ]

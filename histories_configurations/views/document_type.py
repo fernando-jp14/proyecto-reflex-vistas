@@ -7,7 +7,7 @@ from ..models import DocumentType
 def document_types_list(request):
     if request.method != "GET":
         return HttpResponseNotAllowed(["GET"])
-    qs = DocumentType.objects.filter(deleted_at__isnull=True)
+    qs = DocumentType.objects.filter(deleted_atisnull=True)
     data = [{"id": x.id, "name": x.name, "description": x.description} for x in qs]
     return JsonResponse({"document_types": data})
 
@@ -16,16 +16,37 @@ def document_type_create(request):
     if request.method != "POST":
         return HttpResponseNotAllowed(["POST"])
     payload = json.loads(request.body.decode() or "{}")
-    dt = DocumentType.objects.create(name=payload.get("name",""), description=payload.get("description"))
+    dt = DocumentType.objects.create(name=payload.get("name", ""), description=payload.get("description"))
     return JsonResponse({"id": dt.id, "name": dt.name, "description": dt.description}, status=201)
+
 
 @csrf_exempt
 def document_type_delete(request, pk):
-    if request.method != "POST":
-        return HttpResponseNotAllowed(["POST"])
+    if request.method != "DELETE":
+        return HttpResponseNotAllowed(["DELETE"])
+    try:
+        dt = DocumentType.objects.get(pk=pk, deleted_atisnull=True)
+    except DocumentType.DoesNotExist:
+        return JsonResponse({"error": "No encontrado"}, status=404)
+    dt.soft_delete()
+    return JsonResponse({"status": "deleted", "id": pk}, status=200)
+
+@csrf_exempt
+def document_type_edit(request, pk):
+    if request.method != "PUT":
+        return HttpResponseNotAllowed(["PUT"])
+
     try:
         dt = DocumentType.objects.get(pk=pk, deleted_at__isnull=True)
     except DocumentType.DoesNotExist:
-        return JsonResponse({"error":"No encontrado"}, status=404)
-    dt.soft_delete()
-    return JsonResponse({"status": "deleted"})
+        return JsonResponse({"error": "No encontrado"}, status=404)
+    payload = json.loads(request.body.decode() or "{}")
+    dt.name = payload.get("name", dt.name)
+    dt.description = payload.get("description", dt.description)
+
+    dt.save()
+    return JsonResponse({
+        "id": dt.id,
+        "name": dt.name,
+        "description": dt.description
+    }, status=200)
