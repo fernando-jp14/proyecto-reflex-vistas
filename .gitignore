@@ -40,3 +40,6 @@ db.sqlite3
 # =======================================
 .DS_Store
 Thumbs.db
+
+#ignorando carpeta media se guardan los archivos subidos por el usuario
+media/
