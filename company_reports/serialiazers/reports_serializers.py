@@ -58,15 +58,18 @@ class PatientByTherapistSerializer(serializers.Serializer):
 
 
 class DailyCashSerializer(serializers.Serializer):
-    """Serializa datos de caja diaria."""
+    """Serializa datos de caja diaria por cita."""
     
-    payment_type = serializers.CharField()
-    total_payment = serializers.FloatField()
+    id_cita = serializers.IntegerField()
+    payment = serializers.CharField()
+    payment_type = serializers.IntegerField()
+    payment_type_name = serializers.CharField()
     
     def to_representation(self, instance):
-        """Formatea el total de pago."""
+        """Formatea el pago."""
         data = super().to_representation(instance)
-        data['total_payment'] = float(data['total_payment'])
+        if isinstance(data['payment'], (int, float)):
+            data['payment'] = f"{float(data['payment']):.2f}"
         return data
 
 

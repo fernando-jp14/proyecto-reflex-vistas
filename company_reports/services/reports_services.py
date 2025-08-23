@@ -100,7 +100,7 @@ class ReportService:
         return list(report.values())
     
     def get_daily_cash(self, validated_data):
-        """Obtiene el resumen diario de efectivo agrupado por tipo de pago."""
+        """Obtiene el resumen diario de efectivo detallado por cita."""
         query_date = validated_data.get("date")
         
         # Consultar pagos del día
@@ -111,33 +111,24 @@ class ReportService:
                 payment__isnull=False,
                 payment_type__isnull=False
             )
-            .values('payment_type__name')
-            .annotate(total_payment=models.Sum('payment'))
+            .values(
+                'id',
+                'payment',
+                'payment_type',
+                'payment_type__name'
+            )
+            .order_by('-id')  # Ordenar por id descendente para tener las más recientes primero
         )
-        
-        # Ordenar según orden requerido
-        order = {"Cupón": 0, "EFECTIVO": 1, "Yape": 2}
-        pagos_ordenados = []
-        otros = []
-        
-        for p in payments:
-            tipo = p['payment_type__name']
-            if tipo in order:
-                pagos_ordenados.append(p)
-            else:
-                otros.append(p)
-        
-        # Ordenar y combinar
-        pagos_ordenados.sort(key=lambda x: order[x['payment_type__name']])
-        pagos_ordenados.extend(otros)
         
         # Formatear resultado
         result = [
             {
-                "payment_type": p['payment_type__name'],
-                "total_payment": float(p['total_payment'])
+                "id_cita": p['id'],
+                "payment": p['payment'],
+                "payment_type": p['payment_type'],
+                "payment_type_name": p['payment_type__name']
             }
-            for p in pagos_ordenados
+            for p in payments
         ]
         
         return result
