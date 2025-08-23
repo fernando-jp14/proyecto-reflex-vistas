@@ -199,6 +199,68 @@ class ExcelExportView:
         })
         
         # Escribir encabezados
+        headers = [
+            'ID Paciente', 
+            'DNI/Documento', 
+            'Paciente', 
+            'Teléfono', 
+            'Fecha', 
+            'Hora'
+        ]
+        for col, header in enumerate(headers):
+            worksheet.write(0, col, header, header_format)
+        
+        # Escribir datos
+        for row, appointment in enumerate(data, start=1):
+            worksheet.write(row, 0, appointment['patient_id'])
+            worksheet.write(row, 1, appointment['document_number_patient'])
+            worksheet.write(row, 2, appointment['patient'])
+            worksheet.write(row, 3, appointment['primary_phone_patient'])
+            worksheet.write(row, 4, appointment['appointment_date'])
+            worksheet.write(row, 5, appointment['appointment_hour'])
+        
+        # Ajustar anchos de columna
+        worksheet.set_column('A:A', 12)  # ID Paciente
+        worksheet.set_column('B:B', 15)  # DNI/Documento
+        worksheet.set_column('C:C', 40)  # Paciente
+        worksheet.set_column('D:D', 15)  # Teléfono
+        worksheet.set_column('E:E', 12)  # Fecha
+        worksheet.set_column('F:F', 10)  # Hora
+        
+        workbook.close()
+        output.seek(0)
+        
+        # Generar respuesta
+        response = HttpResponse(
+            output.read(),
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = 'attachment; filename=citas.xlsx'
+        return response
+        # Validar parámetros
+        serializer = DateParameterSerializer(data=request.GET)
+        if not serializer.is_valid():
+            return JsonResponse(serializer.errors, status=400)
+        
+        # Obtener datos
+        data = report_service.get_appointments_between_dates(serializer.validated_data)
+        if isinstance(data, dict) and "error" in data:
+            return JsonResponse(data, status=400)
+        
+        # Crear archivo Excel
+        output = io.BytesIO()
+        workbook = xlsxwriter.Workbook(output)
+        worksheet = workbook.add_worksheet('Citas')
+        
+        # Formato para encabezados
+        header_format = workbook.add_format({
+            'bold': True,
+            'bg_color': '#2c3e50',
+            'font_color': 'white',
+            'border': 1
+        })
+        
+        # Escribir encabezados
         headers = ['Fecha', 'Hora', 'Terapeuta', 'Paciente', 'Pago', 'Tipo de Pago']
         for col, header in enumerate(headers):
             worksheet.write(0, col, header, header_format)

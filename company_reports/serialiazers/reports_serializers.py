@@ -77,12 +77,12 @@ class AppointmentRangeSerializer(serializers.Serializer):
     """Serializa citas entre fechas."""
     
     appointment_id = serializers.IntegerField()
+    patient_id = serializers.IntegerField()
+    document_number_patient = serializers.CharField()
+    patient = serializers.CharField()
+    primary_phone_patient = serializers.CharField()
     appointment_date = serializers.DateField(format='%Y-%m-%d')
     appointment_hour = serializers.TimeField(format='%H:%M')
-    therapist = serializers.CharField()
-    patient = serializers.CharField()
-    payment = serializers.FloatField()
-    payment_type = serializers.CharField()
 
 
 class ReportResponseSerializer(serializers.Serializer):

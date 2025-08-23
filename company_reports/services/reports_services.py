@@ -152,30 +152,23 @@ class ReportService:
         # Formatear resultado
         result = []
         for app in appointments:
-            therapist_name = "Sin terapeuta asignado"
-            if app.therapist:
-                therapist_name = " ".join(filter(None, [
-                    app.therapist.last_name_paternal,
-                    app.therapist.last_name_maternal,
-                    app.therapist.first_name
-                ]))
-            
-            patient_name = "Paciente desconocido"
-            if app.patient:
-                patient_name = " ".join(filter(None, [
-                    app.patient.paternal_lastname,
-                    app.patient.maternal_lastname,
-                    app.patient.name
-                ]))
+            if not app.patient:
+                continue
+                
+            patient_name = " ".join(filter(None, [
+                app.patient.paternal_lastname,
+                app.patient.maternal_lastname,
+                app.patient.name
+            ]))
             
             result.append({
                 "appointment_id": app.id,
-                "appointment_date": app.appointment_date.strftime("%Y-%m-%d"),
-                "appointment_hour": app.appointment_hour if isinstance(app.appointment_hour, str) else app.appointment_hour.strftime("%H:%M"),
-                "therapist": therapist_name,
+                "patient_id": app.patient.id,
+                "document_number_patient": app.patient.document_number,
                 "patient": patient_name,
-                "payment": float(app.payment) if app.payment else 0,
-                "payment_type": app.payment_type.name if app.payment_type else "No definido"
+                "primary_phone_patient": app.patient.primary_phone,
+                "appointment_date": app.appointment_date.strftime("%Y-%m-%d"),
+                "appointment_hour": app.appointment_hour if isinstance(app.appointment_hour, str) else app.appointment_hour.strftime("%H:%M")
             })
         
         return result
