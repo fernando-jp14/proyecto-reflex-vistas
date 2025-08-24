@@ -165,6 +165,22 @@ class CompanyDataViewSet(viewsets.ModelViewSet):
         context = super().get_serializer_context()
         context['request'] = self.request
         return context
+    
+    def destroy(self, request, *args, **kwargs):
+        """Sobrescribe el método destroy para retornar un mensaje de éxito"""
+        try:
+            instance = self.get_object()
+            company_name = instance.company_name
+            self.perform_destroy(instance)
+            return Response({
+                'status': 'success',
+                'message': f'Empresa "{company_name}" eliminada correctamente'
+            }, status=status.HTTP_200_OK)
+        except Http404:
+            return Response({
+                'status': 'error',
+                'message': 'Empresa no encontrada'
+            }, status=status.HTTP_404_NOT_FOUND)
 
 '''
 def company_form_view(request):
