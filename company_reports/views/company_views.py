@@ -63,19 +63,17 @@ class CompanyDataViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'], parser_classes=[MultiPartParser, FormParser])
     def upload_logo(self, request, pk=None):
         """Sube y procesa el logo de la empresa."""
-        try:
-            company = self.get_object()
-        except Http404:
-            return Response({"error": "Empresa no encontrada"}, status=status.HTTP_404_NOT_FOUND)
-
+        company = self.get_object()
         serializer = UploadImageRequest(data=request.data)
-        if serializer.is_valid():
-            try:
-                CompanyService.process_logo(company, serializer.validated_data['logo'])
-                return Response({"message": "Logo subido correctamente"}, status=status.HTTP_200_OK)
-            except ValueError as e:
-                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+        try:
+            CompanyService.process_logo(company, serializer.validated_data['logo'])
+            return Response({"message": "Logo subido correctamente"}, status=status.HTTP_200_OK)
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['get'])
     def show_logo(self, request, pk=None):

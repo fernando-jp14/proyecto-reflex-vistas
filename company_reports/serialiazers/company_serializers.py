@@ -11,27 +11,12 @@ class ImageValidator:
 
     @staticmethod
     def get_file_size(file_obj):
-        """Obtiene el tamaño del archivo sin consumirlo definitivamente."""
-        size = getattr(file_obj, 'size', None)
-        if size:
-            return size
-
-        file_like = getattr(file_obj, 'file', file_obj)
-        try:
-            cur = file_like.tell()
-            file_like.seek(0, os.SEEK_END)
-            size = file_like.tell()
-            file_like.seek(cur)
-            return size
-        except Exception:
-            try:
-                content = file_like.read()
-                size = len(content)
-                if hasattr(file_like, 'seek'):
-                    file_like.seek(0)
-                return size
-            except Exception:
-                return 0
+        """Obtiene el tamaño del archivo de forma segura."""
+        if hasattr(file_obj, 'size'):
+            return file_obj.size
+        if hasattr(file_obj, 'file'):
+            return file_obj.file.size
+        return 0
 
     @classmethod
     def validate_size(cls, file_obj):
@@ -59,22 +44,6 @@ class ImageValidator:
         return file_obj
 
 
-class LogoUrlGenerator:
-    """Responsable de generar URLs y verificar existencia de logos."""
-
-    @staticmethod
-    def has_logo(company: CompanyData) -> bool:
-        return bool(company.company_logo)
-
-    @staticmethod
-    def get_logo_url(company: CompanyData, request=None):
-        if not company.company_logo:
-            return None
-        if request:
-            return request.build_absolute_uri(company.company_logo.url)
-        return company.company_logo.url
-
-
 class UploadImageRequest(serializers.Serializer):
     logo = serializers.ImageField()
 
@@ -92,8 +61,12 @@ class CompanyDataSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_at', 'updated_at', 'logo_url', 'has_logo']
 
     def get_logo_url(self, obj):
+        if not obj.company_logo:
+            return None
         request = self.context.get('request')
-        return LogoUrlGenerator.get_logo_url(obj, request)
+        if request:
+            return request.build_absolute_uri(obj.company_logo.url)
+        return obj.company_logo.url
 
     def get_has_logo(self, obj):
-        return LogoUrlGenerator.has_logo(obj)
+        return bool(obj.company_logo)
