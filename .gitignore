@@ -43,3 +43,6 @@ Thumbs.db
 
 #ignorando carpeta media se guardan los archivos subidos por el usuario
 media/
+
+# Ignorar documentación generada automáticamente (solo es prueba)
+API_ENDPOINTS.md

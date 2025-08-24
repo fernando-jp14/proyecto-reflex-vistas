@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from django.templatetags.static import static
 
 class CompanyData(models.Model):
     company_name = models.CharField(max_length=255, unique=True)
@@ -10,12 +9,11 @@ class CompanyData(models.Model):
 
     def get_logo_url(self):
         """
-        Retorna la URL del logo de la empresa o una imagen por defecto
+        Retorna la URL del logo de la empresa o None si no tiene logo
         """
-        if self.company_logo:  # Imagen subida por el usuario
+        if self.company_logo:
             return f"{settings.MEDIA_URL}{self.company_logo}"
-        # Imagen por defecto desde static
-        return static('img/default-logo.png')
+        return None
 
     def has_logo(self):
         return bool(self.company_logo)

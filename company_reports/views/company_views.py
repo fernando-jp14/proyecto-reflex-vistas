@@ -145,31 +145,19 @@ class CompanyDataViewSet(viewsets.ModelViewSet):
         })
     
     def update(self, request, *args, **kwargs):
-        """Sobrescribe el update para preservar el logo al actualizar el nombre"""
+        """Actualiza los datos de la empresa, incluyendo el logo si se proporciona"""
         instance = self.get_object()
-        response_data = {}
+        data = request.data.copy()  # Hacer una copia para poder modificar
+        data['id'] = kwargs.get('pk')  # Añadir el ID para que store sepa que es una actualización
         file = request.FILES.get('logo') or request.FILES.get('company_logo')
-        
-        # Si hay archivo, validar primero
-        if file:
-            try:
-                LogoValidationService.validate(file)
-            except ValueError as e:
-                # Continuar con la actualización del nombre pero informar del error del logo
-                response_data['warning'] = f"El logo no se actualizó: {str(e)}"
-        
-        # Si solo actualizamos datos sin logo o el logo no pasó la validación
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        if serializer.is_valid():
-            current_logo = instance.company_logo
-            serializer.save()
-            self.business_view.preserve_logo_on_update(instance, current_logo)
-            
-            # Combinar los datos del serializador con cualquier mensaje de advertencia
-            response_data.update(serializer.data)
-            return Response(response_data)
-            
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Usar CompanyService para manejar la actualización
+            company = CompanyService.store(data, file)
+            serializer = self.get_serializer(company)
+            return Response(serializer.data)
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
