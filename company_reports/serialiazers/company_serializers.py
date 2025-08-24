@@ -54,6 +54,7 @@ class UploadImageRequest(serializers.Serializer):
 class CompanyDataSerializer(serializers.ModelSerializer):
     logo_url = serializers.SerializerMethodField()
     has_logo = serializers.SerializerMethodField()
+    company_logo = serializers.SerializerMethodField()
 
     class Meta:
         model = CompanyData
@@ -70,3 +71,12 @@ class CompanyDataSerializer(serializers.ModelSerializer):
 
     def get_has_logo(self, obj):
         return bool(obj.company_logo)
+        
+    def get_company_logo(self, obj):
+        """Retorna solo el nombre del archivo con la extensión."""
+        if not obj.company_logo:
+            return None
+        # Obtener la extensión del archivo original
+        file_extension = obj.company_logo.name.split('.')[-1]
+        # Crear el nombre del archivo basado en el nombre de la empresa y la extensión
+        return f"{obj.company_name}.{file_extension}"
