@@ -60,18 +60,29 @@ class CompanyDataViewSet(viewsets.ModelViewSet):
         self.logo_view = LogoFileView()
         self.business_view = CompanyBusinessView()
 
-    @action(detail=True, methods=['post'], parser_classes=[MultiPartParser, FormParser])
+    @action(detail=True, methods=['post', 'put'], parser_classes=[MultiPartParser, FormParser])
     def upload_logo(self, request, pk=None):
-        """Sube y procesa el logo de la empresa."""
+        """
+        POST: Sube un logo solo si la empresa no tiene uno
+        PUT: Actualiza el logo existente
+        """
         company = self.get_object()
         serializer = UploadImageRequest(data=request.data)
         
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Si es POST y ya tiene logo, no permitir la subida
+        if request.method == 'POST' and company.company_logo:
+            return Response(
+                {"error": "La empresa ya tiene un logo. Use PUT para actualizar."}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
             
         try:
             CompanyService.process_logo(company, serializer.validated_data['logo'])
-            return Response({"message": "Logo subido correctamente"}, status=status.HTTP_200_OK)
+            message = "Logo actualizado correctamente" if request.method == 'PUT' else "Logo subido correctamente"
+            return Response({"message": message}, status=status.HTTP_200_OK)
         except ValueError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
