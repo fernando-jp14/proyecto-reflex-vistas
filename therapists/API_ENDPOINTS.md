@@ -60,48 +60,6 @@ GET /therapists/?search=ana           # Búsqueda por texto
 
 ---
 
-### 2. **Especialidades** (`/specializations/`)
-
-#### Operaciones CRUD Completas
-| Método | Endpoint | Descripción | Parámetros |
-|--------|----------|-------------|------------|
-| **GET** | `/specializations/` | Listar especialidades | - |
-| **POST** | `/specializations/` | Crear especialidad | JSON body |
-| **GET** | `/specializations/{id}/` | Obtener especialidad | `id` en path |
-| **PUT** | `/specializations/{id}/` | Actualizar especialidad | `id` + JSON body |
-| **PATCH** | `/specializations/{id}/` | Actualizar parcial | `id` + JSON body |
-| **DELETE** | `/specializations/{id}/` | Eliminar especialidad | `id` en path |
-
----
-
-### 3. **Certificaciones** (`/certifications/`)
-
-#### Operaciones CRUD Completas
-| Método | Endpoint | Descripción | Parámetros |
-|--------|----------|-------------|------------|
-| **GET** | `/certifications/` | Listar certificaciones | - |
-| **POST** | `/certifications/` | Crear certificación | JSON body |
-| **GET** | `/certifications/{id}/` | Obtener certificación | `id` en path |
-| **PUT** | `/certifications/{id}/` | Actualizar certificación | `id` + JSON body |
-| **PATCH** | `/certifications/{id}/` | Actualizar parcial | `id` + JSON body |
-| **DELETE** | `/certifications/{id}/` | Eliminar certificación | `id` en path |
-
----
-
-### 4. **Horarios** (`/schedules/`)
-
-#### Operaciones CRUD Completas
-| Método | Endpoint | Descripción | Parámetros |
-|--------|----------|-------------|------------|
-| **GET** | `/schedules/` | Listar horarios | - |
-| **POST** | `/schedules/` | Crear horario | JSON body |
-| **GET** | `/schedules/{id}/` | Obtener horario | `id` en path |
-| **PUT** | `/schedules/{id}/` | Actualizar horario | `id` + JSON body |
-| **PATCH** | `/schedules/{id}/` | Actualizar parcial | `id` + JSON body |
-| **DELETE** | `/schedules/{id}/` | Eliminar horario | `id` en path |
-
----
-
 ### 5. **Ubicaciones Geográficas**
 
 #### Regiones (`/regions/`)

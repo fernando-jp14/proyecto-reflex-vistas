@@ -33,9 +33,6 @@ therapists/
 - **`apps.py`**  
   Configuración de la app para Django.
 
-- **`migrations/`**  
-  Archivos de migración para la base de datos.
-
 - **`models.py`**  
   Define los modelos principales: `Therapist` y `Specialty`, incluyendo sus campos y relaciones.
 
@@ -50,11 +47,6 @@ therapists/
 
 - **`views.py`**  
   Lógica de las vistas: CRUD, búsqueda, gestión de especialidades y manejo de imágenes.
-
-- **`templates/therapists_ui.html`**  
-  Interfaz HTML opcional para visualización y pruebas manuales.
-
----
 
 ## 🔗 Rutas Principales (urls.py)
 
@@ -73,7 +65,6 @@ from . import views
 urlpatterns = [
     path('', views.TherapistListView.as_view(), name='therapist-list'),
     path('<int:pk>/', views.TherapistDetailView.as_view(), name='therapist-detail'),
-    path('specialties/', views.SpecialtyListView.as_view(), name='specialty-list'),
     # Otros endpoints y vistas
 ]
 ```

@@ -66,7 +66,6 @@ class User(AbstractUser, BaseModel):
         verbose_name = 'Usuario'
         verbose_name_plural = 'Usuarios'
 
-
 class UserVerificationCode(BaseModel):
     """
     Modelo para códigos de verificación de usuario
