@@ -12,12 +12,14 @@
 
         <!-- Formulario para crear empresa -->
         <form id="createCompanyForm">
+            {% csrf_token %}
             <input type="text" id="companyName" placeholder="Nombre de la empresa" required>
             <button type="submit">Crear Empresa</button>
         </form>
 
         <!-- Formulario para actualizar empresa -->
         <form id="updateCompanyForm">
+            {% csrf_token %}
             <input type="number" id="updateId" placeholder="ID Empresa" required>
             <input type="text" id="updateName" placeholder="Nuevo nombre">
             <input type="file" id="updateLogo">
@@ -26,6 +28,7 @@
 
         <!-- Formulario para subir logo -->
         <form id="uploadLogoForm">
+            {% csrf_token %}
             <input type="number" id="uploadId" placeholder="ID Empresa" required>
             <input type="file" id="uploadLogo" required>
             <button type="submit">Subir Logo</button>
@@ -33,6 +36,7 @@
 
         <!-- Formulario para eliminar logo -->
         <form id="deleteLogoForm">
+            {% csrf_token %}
             <input type="number" id="deleteId" placeholder="ID Empresa" required>
             <button type="submit">Eliminar Logo</button>
         </form>

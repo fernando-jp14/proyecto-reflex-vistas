@@ -1,4 +1,22 @@
+
 const API_BASE = "http://127.0.0.1:8000/api/company/company/";
+
+// Función para obtener el CSRF token de la cookie
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
 
 // Mostrar empresas al cargar
 document.addEventListener("DOMContentLoaded", loadCompanies);
@@ -34,7 +52,10 @@ document.getElementById("createCompanyForm").addEventListener("submit", e => {
 
     fetch(API_BASE, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken
+        },
         body: JSON.stringify({ company_name: name })
     })
     .then(res => res.json())
@@ -52,7 +73,10 @@ document.getElementById("uploadLogoForm").addEventListener("submit", e => {
 
     fetch(`${API_BASE}${id}/upload_logo/`, {
         method: "POST",
-        body: formData
+        body: formData,
+        headers: {
+            'X-CSRFToken': csrftoken
+        }
     })
     .then(res => res.json())
     .then(() => loadCompanies());
@@ -64,7 +88,10 @@ document.getElementById("deleteLogoForm").addEventListener("submit", e => {
     const id = document.getElementById("deleteId").value;
 
     fetch(`${API_BASE}${id}/delete_logo/`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {
+            'X-CSRFToken': csrftoken
+        }
     })
     .then(res => res.json())
     .then(() => loadCompanies());
@@ -83,7 +110,10 @@ document.getElementById("updateCompanyForm").addEventListener("submit", e => {
 
     fetch(`${API_BASE}${id}/`, {
         method: "PUT",
-        body: formData
+        body: formData,
+        headers: {
+            'X-CSRFToken': csrftoken
+        }
     })
     .then(res => res.json())
     .then(() => loadCompanies());
