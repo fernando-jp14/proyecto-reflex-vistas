@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from company_reports.views.statistics_views import StatisticsViewSet, dashboard_view, GetMetricsView
-from company_reports.views.company_views import CompanyDataViewSet
+from company_reports.views.company_views import CompanyDataViewSet, company
 #from company_reports.views.emails_views import dashboard_email, SendVerifyCodeAPIView, VerifyCodeAPIView
 from company_reports.views import reports_views as views
 
@@ -30,13 +30,13 @@ export_urlpatterns = [
     path('exports/pdf/resumen-caja/', views.pdf_resumen_caja, name='pdf_resumen_caja'),
     path('exports/excel/citas-rango/', views.exportar_excel_citas, name='exportar_excel_citas'),
 ]
-'''
+
 views_urlpatterns = [
-    path('form/', company_form_view, name='company_form'),
+    path('companies/', company, name='companies'),
 ]
-'''
+
 urlpatterns = []
 urlpatterns.extend(api_urlpatterns)
 urlpatterns.extend(reports_urlpatterns)
 urlpatterns.extend(export_urlpatterns)
-#urlpatterns.extend(views_urlpatterns)
+urlpatterns.extend(views_urlpatterns)

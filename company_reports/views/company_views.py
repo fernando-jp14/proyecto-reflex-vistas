@@ -180,8 +180,7 @@ class CompanyDataViewSet(viewsets.ModelViewSet):
                 'message': 'Empresa no encontrada'
             }, status=status.HTTP_404_NOT_FOUND)
 
-'''
-def company_form_view(request):
+
+def company(request):
     """Vista para el formulario de gestión de empresas"""
-    return render(request, 'company/company_form.html')
-    '''
+    return render(request, 'company.html')

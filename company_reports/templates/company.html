@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Empresas</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestión de Empresas</h1>
+
+        <!-- Formulario para crear empresa -->
+        <form id="createCompanyForm">
+            <input type="text" id="companyName" placeholder="Nombre de la empresa" required>
+            <button type="submit">Crear Empresa</button>
+        </form>
+
+        <!-- Formulario para actualizar empresa -->
+        <form id="updateCompanyForm">
+            <input type="number" id="updateId" placeholder="ID Empresa" required>
+            <input type="text" id="updateName" placeholder="Nuevo nombre">
+            <input type="file" id="updateLogo">
+            <button type="submit">Actualizar Empresa</button>
+        </form>
+
+        <!-- Formulario para subir logo -->
+        <form id="uploadLogoForm">
+            <input type="number" id="uploadId" placeholder="ID Empresa" required>
+            <input type="file" id="uploadLogo" required>
+            <button type="submit">Subir Logo</button>
+        </form>
+
+        <!-- Formulario para eliminar logo -->
+        <form id="deleteLogoForm">
+            <input type="number" id="deleteId" placeholder="ID Empresa" required>
+            <button type="submit">Eliminar Logo</button>
+        </form>
+
+        <h2>Listado de Empresas</h2>
+        <div id="companyList"></div>
+    </div>
+
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>
