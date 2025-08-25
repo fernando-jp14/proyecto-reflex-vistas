@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, UserVerificationCode, Permission, Role
+from .models import User, Permission, Role
 
 
 @admin.register(User)
@@ -25,16 +25,6 @@ class CustomUserAdmin(UserAdmin):
     )
     
     readonly_fields = ('created_at', 'updated_at')
-
-
-@admin.register(UserVerificationCode)
-class UserVerificationCodeAdmin(admin.ModelAdmin):
-    list_display = ('user', 'code', 'expires_at', 'is_used', 'created_at')
-    list_filter = ('is_used', 'created_at')
-    search_fields = ('user__email', 'code')
-    ordering = ('-created_at',)
-    readonly_fields = ('created_at', 'updated_at')
-
 
 @admin.register(Permission)
 class PermissionAdmin(admin.ModelAdmin):

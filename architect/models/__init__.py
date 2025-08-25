@@ -1,5 +1,5 @@
-from .user import User, UserVerificationCode
 from .permission import Permission, Role
 from .base import BaseModel
+from .user import User
 
-__all__ = ['User', 'UserVerificationCode', 'Permission', 'Role', 'BaseModel'] 
+__all__ = ['User', 'Permission', 'Role', 'BaseModel'] 

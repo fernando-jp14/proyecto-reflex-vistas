@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django_filters',
     'guardian',
     'appointments_status',
-    'architect',
+    'architect.apps.ArchitectConfig',
     'histories_configurations',
     'patients_diagnoses',
     'therapists',

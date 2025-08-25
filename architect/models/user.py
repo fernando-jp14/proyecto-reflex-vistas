@@ -65,19 +65,3 @@ class User(AbstractUser, BaseModel):
     class Meta:
         verbose_name = 'Usuario'
         verbose_name_plural = 'Usuarios'
-
-class UserVerificationCode(BaseModel):
-    """
-    Modelo para códigos de verificación de usuario
-    """
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    code = models.CharField(max_length=6)
-    expires_at = models.DateTimeField()
-    is_used = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"Code for {self.user.email}"
-
-    class Meta:
-        verbose_name = 'Código de Verificación'
-        verbose_name_plural = 'Códigos de Verificación' 
