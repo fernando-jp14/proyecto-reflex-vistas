@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 
 from company_reports.models.company import CompanyData
 from company_reports.serialiazers.company_serializers import CompanyDataSerializer, UploadImageRequest
-from company_reports.services.companay_services import CompanyService
+from company_reports.services.companay_services import CompanyService, LogoValidationService
 
 
 class LogoFileView(APIView):
@@ -60,18 +60,29 @@ class CompanyDataViewSet(viewsets.ModelViewSet):
         self.logo_view = LogoFileView()
         self.business_view = CompanyBusinessView()
 
-    @action(detail=True, methods=['post'], parser_classes=[MultiPartParser, FormParser])
+    @action(detail=True, methods=['post', 'put'], parser_classes=[MultiPartParser, FormParser])
     def upload_logo(self, request, pk=None):
-        """Sube y procesa el logo de la empresa."""
+        """
+        POST: Sube un logo solo si la empresa no tiene uno
+        PUT: Actualiza el logo existente
+        """
         company = self.get_object()
         serializer = UploadImageRequest(data=request.data)
         
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Si es POST y ya tiene logo, no permitir la subida
+        if request.method == 'POST' and company.company_logo:
+            return Response(
+                {"error": "La empresa ya tiene un logo. Use PUT para actualizar."}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
             
         try:
             CompanyService.process_logo(company, serializer.validated_data['logo'])
-            return Response({"message": "Logo subido correctamente"}, status=status.HTTP_200_OK)
+            message = "Logo actualizado correctamente" if request.method == 'PUT' else "Logo subido correctamente"
+            return Response({"message": message}, status=status.HTTP_200_OK)
         except ValueError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -134,26 +145,40 @@ class CompanyDataViewSet(viewsets.ModelViewSet):
         })
     
     def update(self, request, *args, **kwargs):
-        """Sobrescribe el update para preservar el logo al actualizar el nombre"""
+        """Actualiza los datos de la empresa, incluyendo el logo si se proporciona"""
         instance = self.get_object()
-        
-        # Usar CompanyBusinessView para manejar la lógica de negocio
-        if self.business_view.handle_logo_update(instance, request):
-            return super().update(request, *args, **kwargs)
-        
-        # Si solo actualizamos datos sin logo, preservamos el logo existente
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        if serializer.is_valid():
-            current_logo = instance.company_logo
-            serializer.save()
-            self.business_view.preserve_logo_on_update(instance, current_logo)
+        data = request.data.copy()  # Hacer una copia para poder modificar
+        data['id'] = kwargs.get('pk')  # Añadir el ID para que store sepa que es una actualización
+        file = request.FILES.get('logo') or request.FILES.get('company_logo')
+
+        try:
+            # Usar CompanyService para manejar la actualización
+            company = CompanyService.store(data, file)
+            serializer = self.get_serializer(company)
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['request'] = self.request
         return context
+    
+    def destroy(self, request, *args, **kwargs):
+        """Sobrescribe el método destroy para retornar un mensaje de éxito"""
+        try:
+            instance = self.get_object()
+            company_name = instance.company_name
+            self.perform_destroy(instance)
+            return Response({
+                'status': 'success',
+                'message': f'Empresa "{company_name}" eliminada correctamente'
+            }, status=status.HTTP_200_OK)
+        except Http404:
+            return Response({
+                'status': 'error',
+                'message': 'Empresa no encontrada'
+            }, status=status.HTTP_404_NOT_FOUND)
 
 '''
 def company_form_view(request):

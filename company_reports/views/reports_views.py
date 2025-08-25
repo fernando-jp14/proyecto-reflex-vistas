@@ -303,7 +303,7 @@ pdf_export = PDFExportView()
 excel_export = ExcelExportView()
 
 
-# Funciones que mantienen la interfaz original (no rompen funcionalidad)
+# Funciones que mantienen la interfaz original (no rompen funcionalidad) "# Versión función wrapper (capa de protección)"
 def get_number_appointments_per_therapist(request):
     try:
         return report_api.get_number_appointments_per_therapist(request)

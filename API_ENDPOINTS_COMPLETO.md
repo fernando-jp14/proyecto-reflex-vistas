@@ -2407,6 +2407,493 @@ Password: edu123
 ```
 
 ---
+## ⚙️ Módulo 8: Empresa y reportes (`/api/company/`)
+### Empresa
+|   Método   | Endpoint | Descripción | Autenticación |
+|------------|----------|-------------|---------------|
+| **GET**    |  `/api/company/company/` | Listar Empresa | Requerida |
+| **POST**   |  `/api/company/company/` | Crear Empresa  | Requerida |
+| **GET**    | `/api/company/company/{id}/` | Ver empresa específica | Requerida |
+| **POST**   | `/api/company/company/{id}/upload_logo/` | Subir Logo | Requerida |
+| **DELETE** | `/api/company/company/{id}` | Eliminar Empresa | Requerida |
+| **DELETE** | `/api/company/company/{id}/delete_logo/` | Eliminar Logo | Requerida |
+| **GET**    | `/api/company/company/{id}/show_logo/` | Mostrar Logo | Requerida |
+| **PUT**    | `/api/company/company/{id}/` | Actualizar Nombre y Logo | Requerida |
+
+### Ejemplo de Empresa
+**Crear Empresa**
+**Método**:POST
+**URL**: `{{base_url}}/api/company/company/`
+-**Auth**: Basic Auth
+  - Username: `xxangelx31@gmail.com`
+  - Password: `edu123`
+-**Headers:**
+-**Body (raw):**
+```json
+{
+  "company_name": "Reflexo"
+}
+```
+
+**Respuesta Exitosa:**
+```json
+{  
+  "id": 1,
+  "company_name": "Reflexo",
+  "company_logo": null,
+  "logo_url": null,
+  "has_logo": false,
+  "created_at": "2025-08-24T04:15:38.320819Z",
+  "updated_at": "2025-08-24T04:15:38.320839Z"
+}
+```
+
+**Ejemplos Adicionales de Empresa:**
+
+**Ejemplo 2:**
+```json
+{
+  "company_name": "Reflexo2"
+}
+```
+
+**Posibles Errores al crear el nombre de la empresa:**
+```json
+{
+    "company_name": [
+        "Company Data with this company name already exists."
+    ]
+}
+```
+
+**Nota Importante sobre crear  la empresa**
+Al crear una empresa no se tiene que poner el mismo nombre , la idea esa solo usar la unica empresa creada y editarla aunque
+se pueda crear más.
+
+------------------------------------------------------------------------------
+
+**Subir Logo**
+- **Método:** POST
+- **URL:** `{{base_url}}/api/company/company/{id}/upload_logo/`
+- **Auth:** Basic Auth
+  - Username: `xxangelx31@gmail.com`
+  - Password: `edu123`
+- **Headers:**
+  ```
+  Content-Type: application/json
+  ```
+- **Body (Form-data):**
+  |        Key         |       Value        | 
+  |--------------------|--------------------|
+  | logo       [file]  |  *escoger imagen*  | 
+  |-----------------------------------------|
+
+  ```json
+  {
+    "message": "Logo subido correctamente"
+  }
+  ```
+
+**Posibles Errores al subir el logo:**
+
+```json
+{
+    "logo": [
+        "Solo se permiten imágenes JPG o PNG."
+    ]
+}
+```
+
+```json
+{
+    "logo": [
+        "El logo no puede superar los 2 MB."
+    ]
+}
+```
+
+```json
+{
+    "error": "La empresa ya tiene un logo. Use PUT para actualizar."
+}
+```
+**Nota Importante sobre crear  la empresa**
+-*Colocar en la parte de key "logo" y seleccionar file, por defecto está text*
+-*No subir una imagen de mas de 2mb*
+-*Solo se puede subir un logo si la empresa no cuenta con ella, para actualizar se usa put*
+
+-------------------------------------------------------------------------------------------
+
+**Eliminar Empresa**
+**Método**:DELETE
+**URL**: `{{base_url}}/api/company/company/{id}`
+-**Auth**: Basic Auth
+  - Username: `xxangelx31@gmail.com`
+  - Password: `edu123`
+-**Headers:**
+-**Body (raw):**
+
+**Respuesta Exitosa:**
+```json
+{
+    "status": "success",
+    "message": "Empresa \"REFLEXO1\" eliminada correctamente"
+}
+```
+**Posibles Errores al Elimnar empresa**
+
+```json
+{
+    "status": "error",
+    "message": "Empresa no encontrada"
+}
+```
+**Nota Importante sobre eliminar empresa**
+-*Colocar el id correcto de la empresa creada*
+
+**Eliminar Logo**
+**Método**:DELETE
+**URL**: `{{base_url}}/api/company/company/{id}/delete_logo`
+-**Auth**: Basic Auth
+  - Username: `xxangelx31@gmail.com`
+  - Password: `edu123`
+-**Headers:**
+-**Body (raw):**
+
+**Respuesta Exitosa:**
+```json
+{
+    "message": "Logo eliminado correctamente"
+}
+```
+**Posibles Errores Logo**
+
+```json
+{
+    "detail": "No CompanyData matches the given query."
+}
+```
+**Nota Importante sobre eliminar empresa**
+-*Colocar el id correcto de la empresa creada*
+
+--------------------------------------------------------------
+
+**Actualizar Empresa**
+*SOLO ACTUALIZAR EL NOMBRE*
+- **Método:** PUT
+- **URL:** `{{base_url}}/api/company/company/{id}/`
+- **Auth:** Basic Auth
+  - Username: `xxangelx31@gmail.com`
+  - Password: `edu123`
+- **Headers:**
+-**Body (raw):** 
+
+```json
+{
+  "company_name": "empresaT"
+}
+```
+
+**Respuesta Exitosa:**
+```json
+{
+    "id": 1,
+    "company_name": "empresaT",
+    "company_logo": "empresaT.jpg",
+    "logo_url": "http://127.0.0.1:8000/media/logos/oskar-smethurst-B1GtwanCbiw-unsplash_1.jpg",
+    "has_logo": true,
+    "created_at": "2025-08-24T16:24:25.239714Z",
+    "updated_at": "2025-08-24T16:51:54.849350Z"
+}
+```
+*ACTUALIZAR NOMBRE Y LOGO*
+- **Método:** PUT
+- **URL:** `{{base_url}}/api/company/company/{id}/`
+- **Auth:** Basic Auth
+  - Username: `xxangelx31@gmail.com`
+  - Password: `edu123`
+- **Headers:**
+- **Body (Form-data):**
+  |        Key           |       Value        | 
+  |----------------------|--------------------|
+  | company_name  [text] |       reflexo      | 
+  |----------------------|--------------------|
+  | company_logo  [file] |  *escoger imagen*  |
+  |----------------------|--------------------|
+
+**Respuesta Exitosa:**
+```json
+{
+    "id": 1,
+    "company_name": "reflexo",
+    "company_logo": "reflexo.jpg",
+    "logo_url": "http://127.0.0.1:8000/media/logos/oskar-smethurst-B1GtwanCbiw-unsplash_1.jpg",
+    "has_logo": true,
+    "created_at": "2025-08-24T16:24:25.239714Z",
+    "updated_at": "2025-08-24T17:01:41.761879Z"
+}
+```
+**Advertencias**
+```json
+{
+    "warning": "El logo no se actualizó: Formato no permitido. Solo se aceptan: jpg, jpeg, png",
+    "id": 1,
+    "company_name": "reflexo",
+    "company_logo": "reflexo.jpg",
+    "logo_url": "http://127.0.0.1:8000/media/logos/oskar-smethurst-B1GtwanCbiw-unsplash_1.jpg",
+    "has_logo": true,
+    "created_at": "2025-08-24T16:24:25.239714Z",
+    "updated_at": "2025-08-24T17:15:02.281286Z"
+}
+```
+
+```json
+{
+    "warning": "El logo no se actualizó: El logo excede el tamaño máximo permitido de 2097152 bytes.",
+    "id": 1,
+    "company_name": "reflexo",
+    "company_logo": "reflexo.jpg",
+    "logo_url": "http://127.0.0.1:8000/media/logos/oskar-smethurst-B1GtwanCbiw-unsplash_1.jpg",
+    "has_logo": true,
+    "created_at": "2025-08-24T16:24:25.239714Z",
+    "updated_at": "2025-08-24T17:16:38.328992Z"
+}
+```
+**Nota Importante Actualizar Empresa**
+-*Hay dos maneras de actualizar una por "raw" solo actualiza el nombre y la otra manera "Form-data" permite ambos el nombre y el logo*
+-*La imagen se actualiza solo si es un formtato de imagen permitido o si no pasa los 2mb de lo contrario te da una advertencia y se queda la imagen que ya tenia antes*
+-**si pones PATCH en vez de PUT realiza lo mismo**
+
+### Reportes
+### Cuando generen la cita pongan payment, payment_type, ,payment_type_name para que se muestre bien los reports:
+| Método     | Endpoint                                                                                     | Descripción               | Autenticación |
+|--------    |----------------------------------------------------------------------------------------------|-------------              |---------------|
+| **GET**    | `/api/company/reports/appointments-per-therapist/?date=2025-08-25`                           | Reporte por terapeuta     | Requerida     |
+| **GET**    | `/api/company/reports/daily-cash/?date=2025-08-25`                                           | Caja diaria               | Requerida     |
+| **GET**    | `/api/company/reports/patients-by-therapist/?date=2025-08-25`                                | Pacientes por terapeuta   | Requerida     |
+| **GET**    | `/api/company/reports/appointments-between-dates/?start_date=2025-08-25&end_date=2025-08-28` | Citas entre fechas        | Requerida     |
+| **GET**    | `/api/company/exports/excel/citas-rango/?start_date=2025-08-25&end_date=2025-08-28`          | Generar reporte en excel  | Requerida     |
+
+
+### Ejemplos de reporte de citas por terapeuta
+**Mostrar: "Reporte de cita por terapeuta":**
+- **Método: GET** 
+- **URL:** `{{base_url}}/api/company/reports/appointments-per-therapist/?date=2025-08-25`
+- **Auth:** Basic Auth
+  - Username: `xxangelx31@gmail.com`
+  - Password: `edu123`
+- **Headers:**
+  ```
+  Content-Type: application/JSON
+  ```
+**Respuesta Exitosa:**
+```json
+{
+    "therapists_appointments": [
+        {
+            "id": 1,
+            "first_name": "Carlos",
+            "last_name_paternal": "Rodríguez",
+            "last_name_maternal": "Martínez",
+            "appointments_count": 2,
+            "percentage": 100
+        }
+    ],
+    "total_appointments_count": 2
+}
+```
+**Nota Importante sobre Citas por terapeuta:**
+- **No hay cita creada**: Se debe crear antes una cita para mostrar un reporte.
+
+
+### Ejemplos de Reporte diario de caja
+**Mostrar: "Reporte de diario de caja":**
+- **Método: GET** 
+- **URL:** `{{base_url}}/api/company/reports/daily-cash/?date=2025-08-25`
+- **Auth:** Basic Auth
+  - Username: `xxangelx31@gmail.com`
+  - Password: `edu123`
+- **Headers:**
+  ```
+  Content-Type: application/JSON
+  ```
+**Respuesta Exitosa:**
+```json
+[
+    {
+        "id_cita": 2,
+        "payment": "50.00",
+        "payment_type": 2,
+        "payment_type_name": "Efectivo"
+    },
+    {
+        "id_cita": 1,
+        "payment": "100.00",
+        "payment_type": 1,
+        "payment_type_name": "Yape"
+    }
+]
+```
+**Nota Importante sobre Reporte diario de caja:**
+- **`payment_type`**: Se debe crear antes generar un reporte diario de caja.
+
+### Ejemplos de Reporte de pacientes por Terapeuta
+**Mostrar: "Reporte de paciente por Terapeuta":**
+- **Método: GET** 
+- **URL:** `{{base_url}}/api/company/reports/patients-by-therapist/?date=2025-08-25`
+- **Auth:** Basic Auth
+  - Username: `xxangelx31@gmail.com`
+  - Password: `edu123`
+- **Headers:**
+  ```
+  Content-Type: application/JSON
+  ```
+**Respuesta Exitosa:**
+```json
+[
+    {
+        "therapist_id": "1",
+        "therapist": "Rodríguez Martínez Carlos",
+        "patients": [
+            {
+                "patient_id": 2,
+                "patient": "García Hernández Jose Sofía",
+                "appointments": 1
+            },
+            {
+                "patient_id": 1,
+                "patient": "García Hernández Ana Sofía",
+                "appointments": 1
+            }
+        ]
+    }
+]
+```
+**Nota Importante sobre Reporte de pacientes por Terapeuta:**
+- **`therapist`**: Debe estar agregado a una cita.
+- **`patient`**: Debe estar agregado a una cita y relacionado con un terapeuta.
+
+
+### Ejemplos de Reporte de Citas en un rango de fechas
+**Mostrar: "Reporte citas entre fechas":**
+- **Método: GET** 
+- **URL:** `{{base_url}}/api/company/reports/appointments-between-dates/?start_date=2025-08-25&end_date=2025-08-28`
+- **Auth:** Basic Auth
+  - Username: `xxangelx31@gmail.com`
+  - Password: `edu123`
+
+**Respuesta Exitosa:**
+
+```json
+[
+    {
+        "appointment_id": 1,
+        "patient_id": 1,
+        "document_number_patient": "11111111",
+        "patient": "García Hernández Ana Sofía",
+        "primary_phone_patient": "+51 444 444 444",
+        "appointment_date": "2025-08-25",
+        "appointment_hour": "14:30"
+    },
+    {
+        "appointment_id": 2,
+        "patient_id": 1,
+        "document_number_patient": "11111111",
+        "patient": "García Hernández Ana Sofía",
+        "primary_phone_patient": "+51 444 444 444",
+        "appointment_date": "2025-08-25",
+        "appointment_hour": "14:30"
+    },
+    {
+        "appointment_id": 3,
+        "patient_id": 1,
+        "document_number_patient": "11111111",
+        "patient": "García Hernández Ana Sofía",
+        "primary_phone_patient": "+51 444 444 444",
+        "appointment_date": "2025-08-25",
+        "appointment_hour": "14:30"
+    }
+]
+```
+
+**Nota Importante sobre Reporte de pacientes por Terapeuta:**
+- **Debe contener lo necesario**: De haber un paciente, una fecha exacta de la cita y también una hora de la cita .
+--------------------------------------------------------------
+
+**Mostrar: "Reporte citas entre fechas (EXCEL)":**
+- **Método: GET** 
+- **URL:** `{{base_url}}/api/company/reports/patients-by-therapist/?date=2025-08-25`
+- **Auth:** 
+- **Headers:**
+
+**Probarlo en un navegador**
+**Respuesta Exitosa:**
+*se genera un excel*
+
+ID Paciente	DNI/Documento	Paciente	      Teléfono	      Fecha	   Hora
+1	11111111	García Hernández Ana Sofía	+51 444 444 444	2025-08-25	14:30
+1	11111111	García Hernández Ana Sofía	+51 444 444 444	2025-08-25	14:30
+1	11111111	García Hernández Ana Sofía	+51 444 444 444	2025-08-25	14:30
+1	11111111	García Hernández Ana Sofía	+51 444 444 444	2025-08-25	14:30
+1	11111111	García Hernández Ana Sofía	+51 444 444 444	2025-08-25	14:30
+
+**Nota Importante**
+-**Usar el endpoint en un navegador ya que si se pone en el postman no se ve de una manera adecuado**
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+### Estadísticas
+| Método     | Endpoint                                                               | Descripción                    | Autenticación |
+|--------    |----------------------------------------------------------------------- |--------------------------------|---------------|
+| **GET**    | `/api/company/reports/statistics/?start=2025-08-25&end=2025-08-28`     | Mostrar estadísticas de datos  | Requerida     |
+
+
+### Ejemplos de Estadísticas
+**Mostrar: "Estadísticas de datos":**
+- **Método: GET** 
+- **URL:** `{{base_url}}/api/company/reports/statistics/?start=2025-08-25&end=2025-08-28`
+- **Auth:** Basic Auth
+  - Username: `xxangelx31@gmail.com`
+  - Password: `edu123`
+
+**Respuesta Exitosa:**
+```json
+{
+    "terapeutas": [
+        {
+            "id": 1,
+            "terapeuta": "Rodríguez Martínez, Carlos",
+            "sesiones": 2,
+            "ingresos": 150,
+            "raiting": 5
+        }
+    ],
+    "tipos_pago": {
+        "Efectivo": 1,
+        "Yape": 1
+    },
+    "metricas": {
+        "ttlpacientes": 2,
+        "ttlsesiones": 2,
+        "ttlganancias": 150
+    },
+    "ingresos": {
+        "Lunes": 150
+    },
+    "sesiones": {
+        "Lunes": 2
+    },
+    "tipos_pacientes": {
+        "c": 0,
+        "cc": 0
+    }
+}
+ ```
+**Nota Importante sobre Reporte de pacientes por Terapeuta:**
+- **Debe existir lo necesario**: Se debe haber ingresado datos como ingresos, citas, cant. de tipo de pacientes, terapeutas, etc.
+
+--------------------------------------------------------------------------------------------
 
 ## 🔍 Filtros y Búsquedas
 
@@ -2465,3 +2952,4 @@ python manage.py runserver
 - **Insomnia**: Alternativa a Postman
 - **Thunder Client**: Extensión de VS Code
 - **httpie**: Para línea de comandos (alternativa a curl)
+
