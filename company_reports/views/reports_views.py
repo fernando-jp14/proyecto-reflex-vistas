@@ -117,6 +117,7 @@ class PDFExportView:
         
         return render(request, 'pdf_templates/citas_terapeuta.html', context)
     
+    #listo
     @staticmethod
     @pdf_decorator(pdfname='pacientes_por_terapeuta.pdf')
     def pdf_pacientes_terapeuta(request):
@@ -124,21 +125,31 @@ class PDFExportView:
         serializer = DateParameterSerializer(data=request.GET)
         if not serializer.is_valid():
             return JsonResponse(serializer.errors, status=400)
-        
+
         # Obtener datos
         data = report_service.get_patients_by_therapist(serializer.validated_data)
         if isinstance(data, dict) and "error" in data:
             return JsonResponse(data, status=400)
-        
-        # Preparar contexto usando serializer
-        context_data = {
+
+        # Si no hay datos, mostrar mensaje en PDF
+        if not data or (isinstance(data, list) and len(data) == 0):
+            context = {
+                'date': serializer.validated_data.get('date'),
+                'data': [],
+                'title': 'Pacientes por Terapeuta',
+                'no_data': True
+            }
+            return render(request, 'pdf_templates/pacientes_terapeuta.html', context)
+
+        # Preparar contexto y pasarlo directamente al template (sin serializar 'data')
+        context = {
             'date': serializer.validated_data.get('date'),
             'data': data,
-            'title': 'Pacientes por Terapeuta'
+            'title': 'Pacientes por Terapeuta',
+            'no_data': False
         }
-        context_serializer = PDFContextSerializer(context_data)
-        context = context_serializer.data
-        
+
+
         return render(request, 'pdf_templates/pacientes_terapeuta.html', context)
     
     @staticmethod

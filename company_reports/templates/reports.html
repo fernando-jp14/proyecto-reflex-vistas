@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reportes</title>
+    <link rel="stylesheet" href="{% static 'reports.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Reportes del Día</h1>
+
+        <!-- Filtro de fecha -->
+        <div class="filter">
+            <label for="date">Seleccionar fecha:</label>
+            <input type="date" id="date">
+            <button onclick="loadReports()">Cargar</button>
+        </div>
+
+        <!-- Reporte 1: Citas por terapeuta -->
+        <section>
+            <h2>🧑‍⚕️ Citas por Terapeuta</h2>
+            <table id="appointmentsTable">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Citas</th>
+                        <th>Porcentaje</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <!-- Reporte 2: Caja diaria -->
+        <section>
+            <h2>💰 Caja diaria</h2>
+            <table id="cashTable">
+                <thead>
+                    <tr>
+                        <th>ID Cita</th>
+                        <th>Monto</th>
+                        <th>Método de pago</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <!-- Reporte 3: Pacientes por terapeuta -->
+        <section>
+            <h2>👥 Pacientes por Terapeuta</h2>
+            <div id="patientsByTherapist"></div>
+        </section>
+
+        <!-- Reporte 4: Citas entre fechas -->
+        <section>
+            <h2>📅 Citas entre Fechas</h2>
+            <div class="filter">
+                <label for="start_date">Desde:</label>
+                <input type="date" id="start_date">
+                <label for="end_date">Hasta:</label>
+                <input type="date" id="end_date">
+                <button onclick="loadAppointmentsBetweenDates()">Buscar</button>
+                <!-- Nuevo botón para Excel -->
+                <button onclick="exportAppointmentsExcel()">📥 Exportar a Excel</button>
+            </div>
+            <table id="appointmentsBetweenTable">
+                <thead>
+                    <tr>
+                        <th>ID Cita</th>
+                        <th>Paciente</th>
+                        <th>DNI</th>
+                        <th>Teléfono</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="{% static 'reports.js' %}"></script>
+</body>
+</html>
+
+

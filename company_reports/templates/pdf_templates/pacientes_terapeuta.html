@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <style type="text/css">
+        body { font-family: Helvetica, Arial, sans-serif; font-size: 13px; }
+        h1 { color: #222; text-align: center; font-size: 22px; margin-bottom: 10px; }
+        .date { text-align: center; margin-bottom: 12px; font-size: 13px; }
+        .therapist-group { margin-bottom: 16px; }
+        .therapist-name { background: #222; color: #fff; padding: 6px; font-size: 15px; }
+        .patient-item { margin-left: 16px; padding: 3px 0; }
+        .patient-count { float: right; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    <div class="date">Fecha del reporte: {{ date }}</div>
+    <div class="date">Generado el: {% now "d/m/Y H:i:s" %}</div>
+
+    {% if no_data %}
+        <div style="text-align:center; color:#888; margin-top:30px;">No hay datos para mostrar en esta fecha.</div>
+    {% else %}
+        {% for therapist in data %}
+        <div class="therapist-group">
+            <div class="therapist-name">
+                {{ therapist.therapist }}
+                <span class="patient-count">
+                    {{ therapist.patients|length }} pacientes
+                </span>
+            </div>
+            {% for patient in therapist.patients %}
+            <div class="patient-item">
+                [ID: {{ patient.patient_id }}] {{ patient.patient }} - {{ patient.appointments }} cita{{ patient.appointments|pluralize }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
