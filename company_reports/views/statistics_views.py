@@ -53,6 +53,6 @@ class StatisticsViewSet(viewsets.ViewSet):
     def get_statistics(self, request):
         view = GetMetricsView()
         return view.get(request)
-        
-def dashboard_view(request):
-    return render(request, 'dashboard.html')  
+
+def statistics_view(request):
+    return render(request, 'statistics.html')

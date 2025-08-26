@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Estadísticas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{% static 'statistics.css' %}">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header class="header">
+      <h1>📈 Estadísticas</h1>
+      <div class="filters">
+        <label>Desde
+          <input type="date" id="start" />
+        </label>
+        <label>Hasta
+          <input type="date" id="end" />
+        </label>
+        <button id="btn-load">Cargar</button>
+      </div>
+    </header>
+
+    <!-- Métricas principales -->
+    <section class="cards">
+      <div class="card">
+        <div class="card-title">Pacientes</div>
+        <div class="card-value" id="kpi-pacientes">—</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Sesiones</div>
+        <div class="card-value" id="kpi-sesiones">—</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Ingresos</div>
+        <div class="card-value" id="kpi-ingresos">—</div>
+      </div>
+    </section>
+
+    <!-- Tabla Terapeutas -->
+    <section class="panel">
+      <div class="panel-header">
+        <h2>🧑‍⚕️ Terapeutas</h2>
+      </div>
+      <div class="table-wrap">
+        <table id="tbl-terapeutas">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Terapeuta</th>
+              <th>Sesiones</th>
+              <th>Ingresos</th>
+              <th>Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- rows -->
+          </tbody>
+        </table>
+        <div class="empty" id="empty-terapeutas" hidden>No hay datos para este rango.</div>
+      </div>
+    </section>
+
+    <!-- Gráficas -->
+    <section class="grid">
+      <div class="panel">
+        <div class="panel-header"><h2>💵 Ingresos por día</h2></div>
+        <canvas id="chart-ingresos"></canvas>
+        <div class="empty" id="empty-ingresos" hidden>No hay datos para mostrar.</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header"><h2>📅 Sesiones por día</h2></div>
+        <canvas id="chart-sesiones"></canvas>
+        <div class="empty" id="empty-sesiones" hidden>No hay datos para mostrar.</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header"><h2>🧾 Tipos de pago</h2></div>
+        <canvas id="chart-pagos"></canvas>
+        <div class="empty" id="empty-pagos" hidden>No hay datos para mostrar.</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header"><h2>👥 Tipos de pacientes</h2></div>
+        <canvas id="chart-pacientes"></canvas>
+        <div class="empty" id="empty-pacientes" hidden>No hay datos para mostrar.</div>
+      </div>
+    </section>
+  </div>
+
+  <script src="{% static 'statistics.js' %}"></script>
+</body>
+</html>

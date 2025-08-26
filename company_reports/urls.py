@@ -1,10 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from company_reports.views.statistics_views import StatisticsViewSet, dashboard_view, GetMetricsView
+from company_reports.views.statistics_views import StatisticsViewSet, GetMetricsView
 from company_reports.views.company_views import CompanyDataViewSet, company
 #from company_reports.views.emails_views import dashboard_email, SendVerifyCodeAPIView, VerifyCodeAPIView
 from company_reports.views import reports_views as views
 from company_reports.views.reports_views import reports_dashboard
+from company_reports.views.statistics_views import statistics_view 
 
 
 router = DefaultRouter()
@@ -35,7 +36,8 @@ export_urlpatterns = [
 
 views_urlpatterns = [
     path('companies/', company, name='companies'),
-    path('reports/', reports_dashboard, name='reports')
+    path('reports/', reports_dashboard, name='reports'),
+    path('statistics/', statistics_view, name='statistics')
 ]
 
 urlpatterns = []
