@@ -148,8 +148,6 @@ class PDFExportView:
             'title': 'Pacientes por Terapeuta',
             'no_data': False
         }
-
-
         return render(request, 'pdf_templates/pacientes_terapeuta.html', context)
     
     @staticmethod
