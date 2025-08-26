@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    <p class="date">Fecha del reporte: {{ date }}</p>
+    <p class="date" style="font-size: 0.9em; color: #666;">Generado el: {% now "d/m/Y H:i:s" %}</p>
+
+    <!--<pre>{{ data|safe }}</pre> para ver como llega la variable dara-->
+    <table>
+        <thead>
+            <tr>
+                <th>Tipo de Pago</th>
+                <th>Monto</th>
+                <th>Citas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {# Ajuste: iterar sobre data si es lista de pagos individuales #}
+            {% for item in data %}
+            <tr>
+                <td>{{ item.payment_type_name }}</td>
+                <td>S/. {{ item.payment|floatformat:2 }}</td>
+                {# Si existe item.appointment_count, mostrarlo; si no, mostrar 1 (una cita por fila) #}
+                <td>
+                    {% if item.appointment_count %}
+                        {{ item.appointment_count }}
+                    {% else %}
+                        1
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="total">
+        Total del día: S/. {{ total|floatformat:2 }}
+    </div>
+</body>
+</html>

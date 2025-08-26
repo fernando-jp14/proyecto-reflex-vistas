@@ -163,19 +163,23 @@ class PDFExportView:
         if isinstance(data, dict) and "error" in data:
             return JsonResponse(data, status=400)
         
-        # Calcular total usando serializer
-        total = sum(item['total_payment'] for item in data) if data else 0
-        
-        # Preparar contexto usando serializer
-        context_data = {
+        # Calcular el total según la estructura de data
+        if isinstance(data, dict) and 'payments' in data:
+            payments = data['payments']
+            total = sum(item.get('total_payment', 0) for item in payments)
+        elif isinstance(data, list):
+            total = sum(float(item.get('payment', 0)) for item in data)
+        else:
+            total = 0
+
+        # Pasar el contexto directamente al template
+        context = {
             'date': serializer.validated_data.get('date'),
             'data': data,
             'total': total,
             'title': 'Resumen de Caja Diaria'
         }
-        context_serializer = PDFContextSerializer(context_data)
-        context = context_serializer.data
-        
+
         return render(request, 'pdf_templates/resumen_caja.html', context)
 
 

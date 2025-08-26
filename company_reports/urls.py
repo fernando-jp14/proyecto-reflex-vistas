@@ -27,10 +27,10 @@ reports_urlpatterns = [
 ]
 
 export_urlpatterns = [
-    path('exports/pdf/citas-terapeuta/', views.pdf_citas_terapeuta, name='pdf_citas_terapeuta'),
-    path('exports/pdf/pacientes-terapeuta/', views.pdf_pacientes_terapeuta, name='pdf_pacientes_terapeuta'),
+    path('exports/pdf/citas-terapeuta/', views.pdf_citas_terapeuta, name='pdf_citas_terapeuta'),#listo
+    path('exports/pdf/pacientes-terapeuta/', views.pdf_pacientes_terapeuta, name='pdf_pacientes_terapeuta'),#listo
     path('exports/pdf/resumen-caja/', views.pdf_resumen_caja, name='pdf_resumen_caja'),
-    path('exports/excel/citas-rango/', views.exportar_excel_citas, name='exportar_excel_citas'),
+    path('exports/excel/citas-rango/', views.exportar_excel_citas, name='exportar_excel_citas'),#listo
 ]
 
 views_urlpatterns = [

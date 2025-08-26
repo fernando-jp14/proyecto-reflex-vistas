@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h1 { color: #2c3e50; text-align: center; }
+        .date { text-align: center; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background-color: #2c3e50; color: white; padding: 10px; text-align: left; }
+        td { padding: 8px; border-bottom: 1px solid #ddd; }
+        .total { font-weight: bold; margin-top: 15px; }
+        .logo { text-align: center; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    <p class="date">Fecha del reporte: {{ date }}</p>
+    <p class="date" style="font-size: 0.9em; color: #666;">Generado el: {% now "d/m/Y H:i:s" %}</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Terapeuta</th>
+                <th>Cantidad</th>
+                <th>Porcentaje</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for therapist in data.therapists_appointments %}
+            <tr>
+                <td>{{ therapist.last_name_paternal }} {{ therapist.last_name_maternal }} {{ therapist.name }}</td>
+                <td>{{ therapist.appointments_count }}</td>
+                <td>
+                    {% if data.total_appointments_count|add:'0' > 0 %}
+                        {# Calcula el porcentaje en el template para evitar errores del backend #}
+                        {% widthratio therapist.appointments_count data.total_appointments_count 100 as percent %}
+                        {{ percent }}%
+                    {% else %}
+                        0%
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <p class="total">Total de citas: {{ data.total_appointments_count }}</p>
+</body>
+</html>
