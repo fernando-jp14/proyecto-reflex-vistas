@@ -20,6 +20,7 @@
         <!-- Reporte 1: Citas por terapeuta -->
         <section>
             <h2>🧑‍⚕️ Citas por Terapeuta</h2>
+            <button onclick="downloadAppointmentsPDF()" style="margin-bottom:10px;">📄 Descargar PDF</button>
             <table id="appointmentsTable">
                 <thead>
                     <tr>
@@ -35,6 +36,7 @@
         <!-- Reporte 2: Caja diaria -->
         <section>
             <h2>💰 Caja diaria</h2>
+            <button onclick="downloadCashPDF()" style="margin-bottom:10px;">📄 Descargar PDF</button>
             <table id="cashTable">
                 <thead>
                     <tr>
@@ -51,6 +53,7 @@
         <section>
             <h2>👥 Pacientes por Terapeuta</h2>
             <div id="patientsByTherapist"></div>
+            <button onclick="downloadPatientsByTherapistPDF()" style="margin-bottom:10px;">📄 Descargar PDF</button>
         </section>
 
         <!-- Reporte 4: Citas entre fechas -->
@@ -82,6 +85,8 @@
     </div>
 
     <script src="{% static 'reports.js' %}"></script>
+    <script>
+    </script>
 </body>
 </html>
 

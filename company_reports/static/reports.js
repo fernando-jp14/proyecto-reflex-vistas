@@ -1,3 +1,7 @@
+function downloadCashPDF() {
+    const date = document.getElementById("date").value || new Date().toISOString().split("T")[0];
+    window.open(`/api/company/exports/pdf/resumen-caja/?date=${date}`, '_blank');
+}
 async function loadReports() {
     const date = document.getElementById("date").value || new Date().toISOString().split("T")[0];
 
@@ -111,6 +115,16 @@ function exportAppointmentsExcel() {
 
     // Abrir el enlace en el navegador para descargar el archivo
     window.location.href = `/api/company/exports/excel/citas-rango/?start_date=${startDate}&end_date=${endDate}`;
+}
+
+function downloadAppointmentsPDF() {
+        const date = document.getElementById("date").value || new Date().toISOString().split("T")[0];
+        window.open(`/api/company/exports/pdf/citas-terapeuta/?date=${date}`, '_blank');
+    }
+
+function downloadPatientsByTherapistPDF() {
+    const date = document.getElementById("date").value || new Date().toISOString().split("T")[0];
+    window.open(`/api/company/exports/pdf/pacientes-terapeuta/?date=${date}`, '_blank');
 }
 
 // Cargar por defecto con la fecha de hoy
